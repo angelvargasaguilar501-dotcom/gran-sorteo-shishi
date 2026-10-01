@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRAN SORTEO DE SHISHI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #2d124d 0%, #110826 70%, #080314 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 15px;
+    }
+
+    .card-container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      border: 2px solid #ffd700;
+      border-radius: 24px;
+      padding: 40px 25px;
+      max-width: 750px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.25), 0 20px 50px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+    }
+
+    .card-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff007f, #ffd700, #00f2fe, #ffd700, #ff007f);
+      background-size: 200% 100%;
+      animation: gradientMove 3s linear infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+
+    .crown-icon {
+      font-size: 3.5rem;
+      margin-bottom: 5px;
+      display: inline-block;
+      filter: drop-shadow(0 0 10px #ffd700);
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      color: #ffd700;
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 2px 2px 4px #000;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      margin-bottom: 25px;
+      color: #e0e0e0;
+      letter-spacing: 1px;
+    }
+
+    .prizes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .prize-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.4));
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.1);
+    }
+
+    .prize-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffda6a;
+      margin-bottom: 6px;
+    }
+
+    .prize-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #00ff88;
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+    }
+
+    /* Sección QR de Yape */
+    .yape-section {
+      background: linear-gradient(135deg, rgba(125, 42, 232, 0.25), rgba(70, 15, 140, 0.4));
+      border: 2px dashed #a832d7;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 20px rgba(125, 42, 232, 0.3);
+    }
+
+    .yape-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #7d2ae8, #a832d7);
+      color: #ffffff;
+      padding: 8px 22px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .qr-box {
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 16px;
+      display: inline-block;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      margin: 10px 0;
+    }
+
+    .qr-box img {
+      width: 210px;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .yape-number {
+      font-size: 1.2rem;
+      color: #ffda6a;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    /* Contador */
+    .timer-container {
+      margin-bottom: 25px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .timer-title {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: #bfa8e9;
+      font-weight: 600;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .time-block {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.5));
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      padding: 10px 14px;
+      border-radius: 12px;
+      min-width: 70px;
+    }
+
+    .time-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    .time-label {
+      font-size: 0.75rem;
+      color: #cccccc;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Botón WhatsApp */
+    .btn-whatsapp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .btn-whatsapp:hover {
+      background: linear-gradient(135deg, #22bf5b, #0e6f64);
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+    <div class="crown-icon">👑</div>
+    <h1>SORTEO DE SHISHI</h1>
+    <p class="subtitle">✨ ¡Participa y gana excelentes premios en efectivo! ✨</p>
+
+    <!-- Premios -->
+    <div class="prizes-grid">
+      <div class="prize-card">
+        <div class="prize-title">🥇 1er PREMIO</div>
+        <div class="prize-amount">S/ 200</div>
+      </div>
+      <div class="prize-card">
+        <div class="prize-title">🥈 2do PREMIO</div>
+        <div class="prize-amount">S/ 100</div>
+      </div>
+    </div>
+
+    <!-- Sección QR de Yape -->
+    <div class="yape-section">
+      <div class="yape-badge">📲 Costo: S/ 5 por Yape</div>
+      <p style="color: #ddd; font-size: 0.95rem; margin-bottom: 8px;">Escanea el código QR para realizar tu pago:</p>
+      
+      <div class="qr-box">
+        <!-- Carga la imagen guardada como yape-qr.png -->
+        <img src="index imagen.png" alt="QR Yape Sorteo de Shishi">
+      </div>
+
+      <div class="yape-number" </div>
+    </div>
+
+    <!-- Contador -->
+    <div class="timer-container">
+      <div class="timer-title">⏰ Tiempo restante para el sorteo ⏰</div>
+      <div class="countdown">
+        <div class="time-block">
+          <div class="time-number" id="days">07</div>
+          <div class="time-label">Días</div>
+        </div>
+        <div class="time-block">
+          <div class="time-number" id="hours">00</div>
+          <div class="time-label">Horas</div>
+        </div>
+        <div class="time-block">
+          <div class="time-number" id="minutes">00</div>
+          <div class="time-label">Minutos</div>
+        </div>
+        <div class="time-block">
+          <div class="time-number" id="seconds">00</div>
+          <div class="time-label">Segundos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <a href="https://wa.me/51945961168" class="btn-whatsapp" target="_blank">
+      💬 Enviar Captura por WhatsApp
+    </a>
+  </div>
+
+  <script>
+    const targetDate = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference <= 0) {
+        document.getElementById('days').innerText = '00';
+        document.getElementById('hours').innerText = '00';
+        document.getElementById('minutes').innerText = '00';
+        document.getElementById('seconds').innerText = '00';
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.Aquí tienes el código completo en HTML/CSS adaptado para integrar la sección del código QR de Yape de forma vistosa dentro de la interfaz. 
+
+Para utilizar la imagen del QR que enviaste:
+1. Guarda la imagen de tu QR en la misma carpeta donde tengas el archivo `index.html`.
+2. Renombra la imagen del QR como `qr-yape.png` (o cambia el nombre en la etiqueta `<img src="qr-yape.png">` del código).
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
